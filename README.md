@@ -54,6 +54,10 @@ Or later:
 
     gcloud container clusters update mycluster-1 --enable-autoscaling --min-nodes 1 --max-nodes 5 --node-pool default-pool
 
+# Verify cluster
+
+    gcloud container clusters describe mycluster-1
+
 # Disable cluster autoscaling
 
     gcloud container clusters update mycluster-1 --no-enable-autoscaling --node-pool default-pool
