@@ -54,6 +54,8 @@ Or later:
 
     gcloud container clusters update mycluster-1 --enable-autoscaling --min-nodes 1 --max-nodes 5 --node-pool default-pool
 
+Notice the autoscaling is defined for every node pool.
+
 # Verify cluster
 
     gcloud container clusters describe mycluster-1
@@ -99,6 +101,12 @@ Verify node count:
 
     kubectl run hello-server --image gcr.io/google-samples/hello-app:1.0 --port 8080
 
+# Show pods
+
+    $ kubectl get pod
+    NAME                            READY     STATUS    RESTARTS   AGE
+    hello-server-66cb56b679-88sxq   1/1       Running   0          3h
+
 # Expose the application to Internet by creating a Service
 
     kubectl expose deployment hello-server --type LoadBalancer --port 80 --target-port 8080
@@ -123,6 +131,10 @@ Application is available on TCP 35.225.112.179:30
 ## Delete load balancer
 
     kubectl delete service hello-server
+
+## Delete pod
+
+    kubectl delete pod hello-server-66cb56b679-88sxq
 
 ## Delete cluster
 
