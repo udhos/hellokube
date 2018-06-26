@@ -13,7 +13,7 @@ More information here: https://cloud.google.com/sdk/docs/#linux
     ./google-cloud-sdk/install.sh
     gcloud init
 
-# Install kubctl
+# Install kubectl
 
     gcloud components update
     gcloud components install kubectl
