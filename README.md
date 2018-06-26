@@ -58,6 +58,25 @@ Or later:
 
     gcloud container clusters describe mycluster-1
 
+Verify autoscaling:
+
+    $ gcloud container clusters describe mycluster-1 | grep -A 5 autoscaling
+    - autoscaling:
+        enabled: true
+        maxNodeCount: 5
+        minNodeCount: 1
+      config:
+        diskSizeGb: 100
+
+Verify node count:
+
+    $ gcloud container clusters describe mycluster-1 | grep Node
+    currentNodeCount: 2
+    currentNodeVersion: 1.8.10-gke.0
+        maxNodeCount: 5
+        minNodeCount: 1
+      initialNodeCount: 3
+
 # Disable cluster autoscaling
 
     gcloud container clusters update mycluster-1 --no-enable-autoscaling --node-pool default-pool
