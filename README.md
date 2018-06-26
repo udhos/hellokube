@@ -97,6 +97,14 @@ Verify node count:
     NAME    MACHINE_TYPE   DISK_SIZE_GB  NODE_VERSION
     pool-2  n1-standard-1  100           1.8.10-gke.0
 
+# Show nodes
+
+    $ kubectl get nodes
+    NAME                                         STATUS    ROLES     AGE       VERSION
+    gke-mycluster-1-default-pool-fe9bc936-jq4l   Ready     <none>    4h        v1.8.10-gke.0
+    gke-mycluster-1-default-pool-fe9bc936-v7cb   Ready     <none>    4h        v1.8.10-gke.0
+    gke-mycluster-1-pool-2-6d597c7f-79vm         Ready     <none>    1h        v1.8.10-gke.0
+
 # Create deployment 'hello-server'
 
     kubectl run hello-server --image gcr.io/google-samples/hello-app:1.0 --port 8080
