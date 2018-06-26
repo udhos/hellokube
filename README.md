@@ -38,6 +38,26 @@ More information here: https://cloud.google.com/sdk/docs/#linux
     NAME         LOCATION       MASTER_VERSION  MASTER_IP      MACHINE_TYPE   NODE_VERSION  NUM_NODES  STATUS
     mycluster-1  us-central1-b  1.8.10-gke.0    35.224.225.63  n1-standard-1  1.8.10-gke.0  3          RUNNING
 
+# Resize cluster
+
+https://cloud.google.com/sdk/gcloud/reference/container/clusters/resize
+
+    gcloud container clusters resize mycluster-1 --size=2
+
+# Enable cluster autoscaling
+
+One can define autoscaling at cluster creation:
+
+    gcloud container clusters create mycluster-1 --num-nodes 3 --enable-autoscaling --min-nodes 2 --max-nodes 5
+
+Or later:
+
+    gcloud container clusters update mycluster-1 --enable-autoscaling --min-nodes 1 --max-nodes 5 --node-pool default-pool
+
+# Disable cluster autoscaling
+
+    gcloud container clusters update mycluster-1 --no-enable-autoscaling --node-pool default-pool
+
 # Create deployment 'hello-server'
 
     kubectl run hello-server --image gcr.io/google-samples/hello-app:1.0 --port 8080
