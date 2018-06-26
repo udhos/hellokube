@@ -46,4 +46,23 @@ More information here: https://cloud.google.com/sdk/docs/#linux
 
     kubectl expose deployment hello-server --type LoadBalancer --port 80 --target-port 8080
 
+# Inspect application
+
+    $ kubectl get service hello-server
+    NAME           TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
+    hello-server   LoadBalancer   10.47.254.157   35.225.112.179   80:31384/TCP   1h
+
+Application is available on TCP 35.225.112.179:30
+
+# Delete resources
+
+## Delete load balancer
+
+    kubectl delete service hello-server
+
+## Delete cluster
+
+    gcloud container clusters delete mycluster-1
+
+--x--
 
