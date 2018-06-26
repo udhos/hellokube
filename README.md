@@ -1,8 +1,8 @@
 # hellokube
 
-# Documentation
+# Cheat sheet
 
-https://cloud.google.com/kubernetes-engine/docs/quickstart?hl=en
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 # Install GCP SDK
 
@@ -107,14 +107,14 @@ Verify node count:
 
     $ kubectl get services
     NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
-    hello-server   LoadBalancer   10.47.241.238   35.193.87.157   80:31906/TCP   34m
+    hello-server   LoadBalancer   10.47.241.238   35.193.87.157  80:31906/TCP   34m
     kubernetes     ClusterIP      10.47.240.1     <none>          443/TCP        2h
 
 # Inspect application
 
     $ kubectl get service hello-server
-    NAME           TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
-    hello-server   LoadBalancer   10.47.254.157   35.225.112.179   80:31384/TCP   1h
+    NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
+    hello-server   LoadBalancer   10.47.241.238   35.193.87.157   80:31384/TCP   1h
 
 Application is available on TCP 35.225.112.179:30
 
