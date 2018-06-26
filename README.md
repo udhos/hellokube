@@ -22,7 +22,7 @@ More information here: https://cloud.google.com/sdk/docs/#linux
 
     gcloud auth login
 
-# Create cluster
+# Create cluster 'mycluster-1'
 
     gcloud container clusters create mycluster-1
 
@@ -37,4 +37,13 @@ More information here: https://cloud.google.com/sdk/docs/#linux
     kubeconfig entry generated for mycluster-1.
     NAME         LOCATION       MASTER_VERSION  MASTER_IP      MACHINE_TYPE   NODE_VERSION  NUM_NODES  STATUS
     mycluster-1  us-central1-b  1.8.10-gke.0    35.224.225.63  n1-standard-1  1.8.10-gke.0  3          RUNNING
+
+# Create deployment 'hello-server'
+
+    kubectl run hello-server --image gcr.io/google-samples/hello-app:1.0 --port 8080
+
+# Expose the application to Internet by creating a Service
+
+    kubectl expose deployment hello-server --type LoadBalancer --port 80 --target-port 8080
+
 
