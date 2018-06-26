@@ -105,6 +105,127 @@ Verify node count:
     gke-mycluster-1-default-pool-fe9bc936-v7cb   Ready     <none>    4h        v1.8.10-gke.0
     gke-mycluster-1-pool-2-6d597c7f-79vm         Ready     <none>    1h        v1.8.10-gke.0
 
+# Build image
+
+## Authorize docker
+
+    gcloud auth configure-docker
+
+## Build and push
+
+    project_id="$(gcloud config get-value project -q)"
+    docker build -t gcr.io/$project_id/hello-app:v1 .
+    docker images
+    docker push gcr.io/$project_id/hello-app:v1
+
+## Explore image contents interactively
+
+    docker run -it gcr.io/$project_id/hello-app:v1 sh
+
+## Test image
+
+    docker run --rm -p 8080:8080 gcr.io/$project_id/hello-app:v1
+
+    $ curl http://localhost:8080
+    Hello, world!
+    Version: 1.0.0
+    Hostname: f42424a8d554
+
+## Deploy the application
+
+    kubectl run hello-web --image=gcr.io/$project_id/hello-app:v1 --port 8080
+
+## List deployments
+
+    kubectl get deployments
+
+## List pods
+
+Notice there is a single replica because the app has been deployment with default replica number.
+
+    $ kubectl get pods
+    NAME                         READY     STATUS    RESTARTS   AGE
+    hello-web-78fdd597bc-bw9kp   1/1       Running   0          8m
+
+## Expose application to Internet
+
+    kubectl expose deployment hello-web --type=LoadBalancer --port 80 --target-port 8080
+
+## List services
+
+    $ kubectl get services
+    NAME         TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+    hello-web    LoadBalancer   10.47.250.102   35.225.5.98   80:32137/TCP   1m
+    kubernetes   ClusterIP      10.47.240.1     <none>        443/TCP        6h
+
+## Test service
+
+Open http://35.225.5.98
+
+## Verify application scale
+
+    $ kubectl get deployment hello-web
+    NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+    hello-web   1         1         1            1           4m
+
+## Scale up application
+
+    kubectl scale deployment hello-web --replicas=3
+
+    $ kubectl get deployment hello-web
+    NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+    hello-web   3         3         3            3           6m
+
+Notice there are 3 replicas:
+
+    $ kubectl get pods
+    NAME                         READY     STATUS    RESTARTS   AGE
+    hello-web-78fdd597bc-bw9kp   1/1       Running   0          7m
+    hello-web-78fdd597bc-qptws   1/1       Running   0          1m
+    hello-web-78fdd597bc-xspcr   1/1       Running   0          1m
+
+## Create and push image v2
+
+    docker build -t gcr.io/$project_id/hello-app:v2 .
+    docker push gcr.io/$project_id/hello-app:v2
+
+## Apply rolling update to deployment
+
+    kubectl set image deployment/hello-web hello-web=gcr.io/$project_id/hello-app:v2
+
+Check http://35.225.5.98/
+
+## Delete resources
+
+Delete service:
+
+    kubectl delete service hello-web
+
+Wait until the load balancer is deleted by using:
+
+    gcloud compute forwarding-rules list
+
+Delete deployment:
+
+    kubectl delete deployment hello-web
+
+Delete images in registry:
+
+    $ gcloud container images list
+    NAME
+    gcr.io/proj-research/hello-app
+    Only listing images in gcr.io/proj-research. Use --repository to list images in other repositories.
+
+    $ gcloud container images list-tags gcr.io/proj-research/hello-app
+    DIGEST        TAGS   TIMESTAMP
+    d1c50bc05b2e  v1,v2  2018-06-26T18:47:59
+    88b076cd90f4         2018-06-26T18:38:12
+    4f2dacbeca43         2018-06-26T18:17:34
+
+    gcloud container images delete gcr.io/proj-research/hello-app@sha256:d1c50bc05b2e --force-delete-tags
+    gcloud container images delete gcr.io/proj-research/hello-app@sha256:88b076cd90f4 --force-delete-tags
+    gcloud container images delete gcr.io/proj-research/hello-app@sha256:4f2dacbeca43 --force-delete-tags
+
 # Create deployment 'hello-server'
 
     kubectl run hello-server --image gcr.io/google-samples/hello-app:1.0 --port 8080
