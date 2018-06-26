@@ -85,6 +85,16 @@ Verify node count:
 
     gcloud container node-pools create pool-2 --cluster mycluster-1 --enable-autoscaling --min-nodes 1 --max-nodes 3
 
+## Output
+
+    $ gcloud container node-pools create pool-2 --cluster mycluster-1 --enable-autoscaling --min-nodes 1 --max-nodes 3
+    WARNING: Currently node auto repairs are disabled by default. In the future this will change and they will be enabled by default. Use `--[no-]enable-autorepair` flag  to suppress this warning.
+    WARNING: Starting in Kubernetes v1.10, new clusters will no longer get compute-rw and storage-ro scopes added to what is specified in --scopes (though the latter will remain included in the default --scopes). To use these scopes, add them explicitly to --scopes. To use the new behavior, set container/new_scopes_behavior property (gcloud config set container/new_scopes_behavior true).
+    Creating node pool pool-2...done.
+    Created [https://container.googleapis.com/v1/projects/proj-research/zones/us-central1-b/clusters/mycluster-1/nodePools/pool-2].
+    NAME    MACHINE_TYPE   DISK_SIZE_GB  NODE_VERSION
+    pool-2  n1-standard-1  100           1.8.10-gke.0
+
 # Create deployment 'hello-server'
 
     kubectl run hello-server --image gcr.io/google-samples/hello-app:1.0 --port 8080
@@ -92,6 +102,13 @@ Verify node count:
 # Expose the application to Internet by creating a Service
 
     kubectl expose deployment hello-server --type LoadBalancer --port 80 --target-port 8080
+
+# List services
+
+    $ kubectl get services
+    NAME           TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
+    hello-server   LoadBalancer   10.47.241.238   35.193.87.157   80:31906/TCP   34m
+    kubernetes     ClusterIP      10.47.240.1     <none>          443/TCP        2h
 
 # Inspect application
 
