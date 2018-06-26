@@ -109,6 +109,12 @@ Verify node count:
 
     kubectl run hello-server --image gcr.io/google-samples/hello-app:1.0 --port 8080
 
+# Show deployments
+
+    $ kubectl get deployments
+    NAME           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+    hello-server   1         1         1            1           3h
+
 # Show pods
 
     $ kubectl get pod
@@ -143,6 +149,10 @@ Application is available on TCP 35.225.112.179:30
 ## Delete pod
 
     kubectl delete pod hello-server-66cb56b679-88sxq
+
+## Delete deployment
+
+    kubectl delete deployment hello-server
 
 ## Delete cluster
 
