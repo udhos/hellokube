@@ -20,6 +20,7 @@ More information here: https://cloud.google.com/sdk/docs/#linux
 
 # Authorize the SDK
 
+    gcloud auth list
     gcloud auth login
 
 # Create cluster 'mycluster-1'
