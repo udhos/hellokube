@@ -45,9 +45,9 @@ https://cloud.google.com/sdk/gcloud/reference/container/clusters/resize
 
     gcloud container clusters resize mycluster-1 --size=2
 
-# Enable autoscaling
+# Enable cluster autoscaling
 
-One can define autoscaling at cluster creation:
+One can define cluster autoscaling at creation:
 
     gcloud container clusters create mycluster-1 --num-nodes 3 --enable-autoscaling --min-nodes 2 --max-nodes 5
 
@@ -55,13 +55,13 @@ Or later:
 
     gcloud container clusters update mycluster-1 --enable-autoscaling --min-nodes 1 --max-nodes 5 --node-pool default-pool
 
-Notice the autoscaling is defined for every node pool.
+Notice the cluster autoscaling is defined for every node pool.
 
 # Verify cluster
 
     gcloud container clusters describe mycluster-1
 
-Verify autoscaling:
+Verify cluster autoscaling:
 
     $ gcloud container clusters describe mycluster-1 | grep -A 5 autoscaling
     - autoscaling:
@@ -80,7 +80,7 @@ Verify node count:
         minNodeCount: 1
       initialNodeCount: 3
 
-# Disable autoscaling
+# Disable cluster autoscaling
 
     gcloud container clusters update mycluster-1 --no-enable-autoscaling --node-pool default-pool
 

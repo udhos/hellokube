@@ -10,11 +10,9 @@ die() {
 }
 
 env_var() {
-	die missing env var USER=$USER PASS=$PASS PORT=$PORT
+	die missing env var PORT=$PORT
 }
 
-[ -n "$USER" ] || env_var
-[ -n "$PASS" ] || env_var
 [ -n "$PORT" ] || env_var
 
 go get github.com/philpearl/scratchbuild
@@ -26,8 +24,27 @@ CGO_ENABLED=0 go install github.com/udhos/gowebhello || die install gowebhello f
 mkdir -p tmp || die mkdir failed
 cp ~/go/bin/gowebhello tmp || die cp failed
 
-scratch -dir ./tmp -entrypoint "/gowebhello -addr :$PORT" -name $USER/web -regurl https://index.docker.io -user $USER -password $PASS -tag latest
+url=https://index.docker.io
+if [ -n "$URL" ]; then
+	url="$URL"
+fi
+
+msg registry URL=$url
+
+if [ -n "$TOKEN" ]; then
+	auth="-token $TOKEN"
+else 
+	[ -n "$USER" ] || die missing env var USER=$USER
+	[ -n "$PASS" ] || die missing env var PASS=$PASS
+	auth="-user $USER -password $PASS"
+fi
+
+msg auth: $auth
+
+scratch -dir ./tmp -entrypoint "/gowebhello -addr :$PORT" -name $USER/web -regurl $url -tag latest $auth
 
 docker pull $USER/web
 
 docker run --rm -p $PORT:$PORT $USER/web
+
+
