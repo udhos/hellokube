@@ -134,7 +134,7 @@ Verify node count:
 
 ## Deploy the application
 
-    kubectl run hello-web --image=gcr.io/$project_id/hello-app:v1 --port 8080
+    kubectl run hello-web --image=gcr.io/$project_id/hello-app:v1 --requests=cpu=100m --port 8080
 
 ## List deployments
 
@@ -184,6 +184,13 @@ Notice there are 3 replicas:
     hello-web-78fdd597bc-bw9kp   1/1       Running   0          7m
     hello-web-78fdd597bc-qptws   1/1       Running   0          1m
     hello-web-78fdd597bc-xspcr   1/1       Running   0          1m
+
+## Create Horizontal Pod Autoscaler
+
+https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+
+    kubectl autoscale deployment hello-web --cpu-percent=50 --min=1 --max=10
+    kubectl get hpa
 
 ## Create and push image v2
 
