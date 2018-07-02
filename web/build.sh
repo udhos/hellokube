@@ -10,10 +10,11 @@ die() {
 }
 
 env_var() {
-	die missing env var PORT=$PORT
+	die missing env var PORT=$PORT USER=$USER
 }
 
 [ -n "$PORT" ] || env_var
+[ -n "$USER" ] || env_var
 
 go get github.com/philpearl/scratchbuild
 go get github.com/udhos/gowebhello
@@ -34,17 +35,16 @@ msg registry URL=$url
 if [ -n "$TOKEN" ]; then
 	auth="-token $TOKEN"
 else 
-	[ -n "$USER" ] || die missing env var USER=$USER
 	[ -n "$PASS" ] || die missing env var PASS=$PASS
 	auth="-user $USER -password $PASS"
 fi
 
 msg auth: $auth
 
-scratch -dir ./tmp -entrypoint "/gowebhello -addr :$PORT" -name $USER/web -regurl $url -tag latest $auth
+scratch -dir ./tmp -entrypoint "/gowebhello -addr :$PORT" -name $USER/web -regurl $url -tag latest $auth || die scratch failed
 
-docker pull $USER/web
+docker pull $USER/web || die docker pull failed
 
-docker run --rm -p $PORT:$PORT $USER/web
+docker run --rm -p $PORT:$PORT $USER/web || die docker run failed
 
 
