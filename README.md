@@ -191,6 +191,7 @@ https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkth
 
     kubectl autoscale deployment hello-web --cpu-percent=50 --min=1 --max=10
     kubectl get hpa
+    kubectl describe hpa
 
 ## Create and push image v2
 
@@ -270,6 +271,10 @@ Delete images in registry:
 Application is available on TCP 35.225.112.179:30
 
 # Delete resources
+
+## Delete horizontal pod autoscaller
+
+    kubectl delete hpa hello-server
 
 ## Delete load balancer
 
